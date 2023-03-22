@@ -1,0 +1,18 @@
+{
+  "ref_archs": [
+    "two_stage_l3clos"
+  ],
+  "generators": [
+    {
+      "config_style": "junos",
+      "section": "system",
+      "template_text": "forwarding-options {\n    port-mirroring {\n        instance {\n            {{port_mirror_name}} {\n                family inet {\n                    output {\n                        ip-address {{port_mirror_collector}};\n                    }\n                }\n            }\n        }\n    }\n}\nfirewall {\n    family inet {\n        filter {{port_mirror_filter}} {\n            term 1 {\n                from {\n                    source-address {\n                        {{port_mirror_source_ip}};\n                    }\n                    destination-address {\n                        {{port_mirror_destination_ip}};\n                    }\n                }\n                then {\n                    count {{port_mirror_counter}};\n                    port-mirror-instance {{port_mirror_name}};\n                    accept;             \n                }                       \n            }                           \n            term 2 {                    \n                then accept;            \n            }                           \n        }                               \n    }                                   \n}  \ninterfaces {\n    {{port_mirror_input_port}} {\n        unit 0 {\n            family inet {\n                filter {\n                    input {{port_mirror_filter}};\n                }\n            }\n        }\n    }\n}",
+      "negation_template_text": "",
+      "filename": ""
+    }
+  ],
+  "created_at": "2023-03-21T23:36:19.153754Z",
+  "id": "f109da4d-2cb1-4971-9653-1ec7e6a7e33f",
+  "last_modified_at": "2023-03-22T15:06:24.202684Z",
+  "display_name": "port-mirror"
+}
